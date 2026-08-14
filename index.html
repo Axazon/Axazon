@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXAZON | Os Melhores Produtos da Amazon Escolhidos Para Você</title>
+    
+    <meta name="description" content="Descubra a vitrine premium da AXAZON. Selecionamos as melhores ofertas e produtos da Amazon nas categorias de eletrônicos, casa, moda e muito mais.">
+    <meta name="keywords" content="ofertas amazon, produtos amazon, melhores produtos, comprar online, eletrônicos, axazon, vitrine amazon, afiliados">
+    <meta name="author" content="AXAZON">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://seusite.com.br/">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
+
+    <style>
+        /* CSS RESET E VARIÁVEIS */
+        :root {
+            --primary-color: #232f3e;
+            --accent-color: #ff9900;
+            --accent-hover: #e38800;
+            --bg-light: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-muted: #86868b;
+            --border-radius: 16px;
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        /* MODO ESCURO (ATIVADO APÓS O SPLASH SCREEN) */
+        body.dark-mode {
+            --primary-color: #ffffff;
+            --bg-light: #0a0e14;
+            --card-bg: #131a22;
+            --text-main: #f5f5f7;
+            --text-muted: #a1a1a6;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .hero { background: linear-gradient(135deg, #0a0e14 0%, #131a22 100%); }
+        body.dark-mode .categories-wrapper { background: #0a0e14; box-shadow: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        body.dark-mode .category-chip { background: #131a22; color: #fff; }
+        body.dark-mode .category-chip:hover, body.dark-mode .category-chip.active { background: #1a242f; color: var(--accent-color); border-color: var(--accent-color); }
+        body.dark-mode header { background: rgba(10, 14, 20, 0.7); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        body.dark-mode header.scrolled { background: rgba(10, 14, 20, 0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        body.dark-mode .search-input { background: #131a22; color: #fff; border-color: rgba(255,255,255,0.1); }
+        body.dark-mode .product-card { border-color: rgba(255,255,255,0.05); }
+        body.dark-mode .product-image-wrapper { background: #fff; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 1.5s ease, color 1.5s ease;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* SPLASH SCREEN */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000; color: #ffffff; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .splash-logo {
+            font-size: 4rem; font-weight: 800; letter-spacing: 2px;
+            background: linear-gradient(90deg, #ffffff, var(--accent-color));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            opacity: 0; animation: fadeInLogo 1s forwards 0.5s;
+        }
+        .splash-text {
+            margin-top: 10px; font-size: 1.2rem; color: #a1a1a6;
+            opacity: 0; animation: fadeInText 1s forwards 1.2s;
+        }
+        .splash-loader {
+            margin-top: 30px; width: 40px; height: 40px;
+            border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent-color);
+            border-radius: 50%; opacity: 0;
+            animation: spin 1s linear infinite, fadeInText 1s forwards 1.8s;
+        }
+
+        @keyframes fadeInLogo { to { opacity: 1; transform: translateY(-10px); } }
+        @keyframes fadeInText { to { opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* HEADER */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+        }
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-container {
+            max-width: 1400px; margin: 0 auto; padding: 15px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .logo { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            color: var(--primary-color); 
+            display: inline-block; 
+            animation: rotate3D 8s linear infinite; 
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.6); 
+            transition: color 1.5s ease;
+        }
+        .logo span { color: var(--accent-color); }
+        @keyframes rotate3D {
+            0% { transform: perspective(600px) rotateY(0deg); }
+            100% { transform: perspective(600px) rotateY(360deg); }
+        }
+
+        .search-container {
+            flex-grow: 1; max-width: 500px; margin: 0 30px; position: relative;
+        }
+        .search-input {
+            width: 100%; padding: 12px 20px 12px 40px; border-radius: 30px;
+            border: 1px solid #ddd; background: var(--bg-light); font-size: 1rem;
+            outline: none; transition: var(--transition-smooth);
+        }
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(255, 153, 0, 0.2);
+        }
+        .search-icon {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);
+        }
+
+        .sm-symbol {
+            font-size: 0.6rem; 
+            font-weight: 800;
+            color: #FFFFFF; 
+            text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5); 
+            display: flex; align-items: center; letter-spacing: 0.5px; user-select: none;
+        }
+        .sm-symbol sup { font-size: 0.4rem; margin-left: 1px; color: #FFFFFF; }
+
+        /* HERO SECTION */
+        .hero {
+            padding-top: 90px; 
+            min-height: 90vh; 
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            background: linear-gradient(135deg, #f5f5f7 0%, #e8eaed 100%);
+            position: relative; overflow: hidden; transition: background 1.5s ease;
+        }
+        .hero-content { 
+            max-width: 1000px; padding: 20px; z-index: 2; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        
+        .hero-logo-container {
+            margin-bottom: 25px; display: flex; justify-content: center; align-items: center; width: 100%;
+        }
+        .hero-logo {
+            max-width: 200px; width: 100%; height: auto;
+            filter: drop-shadow(0 8px 16px rgba(0, 195, 255, 0.2));
+            animation: floatHeroLogo 4s ease-in-out infinite;
+        }
+        @keyframes floatHeroLogo {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        .hero h1 { 
+            font-size: 3.2rem; font-weight: 800; margin-bottom: 25px; 
+            color: var(--primary-color); line-height: 1.25; transition: color 1.5s ease;
+            max-width: 900px; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35em;
+        }
+
+        .zoom-word {
+            display: inline-block; opacity: 0; transform: scale(0.3);
+            animation: zoomInWord 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes zoomInWord { to { opacity: 1; transform: scale(1); } }
+
+        .hero p { 
+            font-size: 1.25rem; color: var(--text-muted); margin-bottom: 40px; 
+            max-width: 750px; line-height: 1.7;
+        }
+
+        .hero-links-container {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 10px;
+        }
+        .btn-neon {
+            display: inline-block; padding: 16px 32px; background: #131a22; color: #ffffff;
+            font-size: 1.05rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            border-radius: 8px; border: 1px solid rgba(0, 195, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.3), inset 0 0 8px rgba(0, 195, 255, 0.2);
+            transition: var(--transition-smooth); animation: floatNeon 3s ease-in-out infinite;
+            text-align: center; min-width: 200px; cursor: pointer;
+        }
+        .btn-neon:nth-child(2) { animation-delay: 0.5s; }
+        .btn-neon:nth-child(3) { animation-delay: 1s; }
+        .btn-neon:hover {
+            background: rgba(0, 195, 255, 0.1); color: #00c3ff;
+            box-shadow: 0 0 25px rgba(0, 195, 255, 0.8), inset 0 0 15px rgba(0, 195, 255, 0.5);
+            border-color: rgba(0, 195, 255, 0.8); transform: scale(1.05);
+        }
+        @keyframes floatNeon { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+
+        .ripple-effect {
+            position: absolute; border-radius: 50%; transform: scale(0);
+            animation: ripple 0.6s linear; background: rgba(255, 255, 255, 0.4);
+        }
+        @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+        /* CATEGORIAS */
+        .categories-wrapper { background: #fff; padding: 20px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: background 1.5s ease; }
+        .categories-container {
+            max-width: 1400px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            padding: 0 20px; 
+            gap: 10px; 
+        }
+        .category-chip {
+            flex: 0 0 auto; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            padding: 8px 16px; 
+            background: var(--bg-light); 
+            border-radius: 20px; 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            transition: var(--transition-smooth); 
+            border: 1px solid transparent;
+        }
+        .category-chip:hover, .category-chip.active {
+            background: #fff; border-color: var(--accent-color); color: var(--accent-color);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* PRODUTOS */
+        .section-container { max-width: 1400px; margin: 60px auto; padding: 0 20px; }
+        .section-title {
+            font-size: 2rem; margin-bottom: 30px; color: var(--primary-color);
+            border-left: 5px solid var(--accent-color); padding-left: 15px; transition: color 1.5s ease;
+        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        
+        .product-card {
+            background: var(--card-bg); border-radius: var(--border-radius); overflow: hidden;
+            box-shadow: var(--shadow-light); transition: var(--transition-smooth);
+            display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.03); position: relative;
+        }
+        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); }
+        .product-image-wrapper { position: relative; padding-top: 100%; background: #fff; overflow: hidden; }
+        .product-image-wrapper img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;
+            padding: 20px; transition: transform 0.5s;
+        }
+        .product-card:hover .product-image-wrapper img { transform: scale(1.08); }
+        
+        .product-badge {
+            position: absolute; top: 15px; left: 15px; background: #e31837; color: white;
+            padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold; z-index: 2;
+        }
+        .product-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .product-title {
+            font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: var(--primary-color);
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .product-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; flex-grow: 1; }
+        .product-rating { color: #ffa41c; margin-bottom: 10px; font-size: 1.1rem; }
+        .product-price { font-size: 1.5rem; font-weight: 800; color: var(--primary-color); margin-bottom: 15px; }
+        
+        .btn-amazon {
+            display: flex; align-items: center; justify-content: center; width: 100%;
+            padding: 12px; background: var(--accent-color); color: #131a22; border-radius: 8px;
+            font-weight: 700; transition: var(--transition-smooth); text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .btn-amazon:hover { background: var(--accent-hover); color: #fff; }
+        
+        .no-results {
+            display: none; text-align: center; width: 100%; grid-column: 1 / -1;
+            padding: 50px; font-size: 1.2rem; color: var(--text-muted);
+        }
+
+        /* RODAPÉ */
+        footer { background: #131a22; color: #fff; padding: 60px 20px 20px; margin-top: 80px; }
+        .footer-grid {
+            max-width: 1400px; margin: 0 auto; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; margin-bottom: 40px;
+        }
+        .footer-logo { font-size: 2rem; font-weight: 800; margin-bottom: 20px; display: inline-block; }
+        .footer-logo span { color: var(--accent-color); }
+        .footer-col h4 { font-size: 1.3rem; margin-bottom: 25px; color: #fff; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; display: inline-block;}
+        .footer-col p, .footer-col a { color: #ccc; font-size: 1rem; margin-bottom: 10px; display: block; transition: color 0.2s; }
+        .footer-col a:hover { color: var(--accent-color); }
+
+        .direct-connection-links { display: flex; flex-wrap: wrap; gap: 35px; margin-top: 25px; }
+        .conn-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 12px; width: 80px; cursor: pointer; transition: transform 0.3s ease; }
+        .conn-icon {
+            width: 70px; height: 70px; border-radius: 50%; background: #1d2530; border: 2px solid rgba(0, 195, 255, 0.4);
+            display: flex; justify-content: center; align-items: center; color: #fff;
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.5), inset 0 0 10px rgba(0, 195, 255, 0.2);
+            animation: floatIcon 3s ease-in-out infinite; transition: all 0.3s ease;
+        }
+        .conn-icon svg { width: 32px; height: 32px; fill: currentColor; }
+        .conn-name { font-size: 0.9rem; color: #aaa; text-align: center; font-weight: 600; transition: color 0.3s ease; }
+        @keyframes floatIcon { 0% { transform: translateY(0); } 50% { transform: translateY(-8px); } 100% { transform: translateY(0); } }
+        .conn-item:nth-child(even) .conn-icon { animation-delay: 1.5s; }
+        .conn-item:nth-child(3n) .conn-icon { animation-delay: 0.7s; }
+        .conn-item:hover .conn-icon {
+            background: rgba(0, 195, 255, 0.1); box-shadow: 0 0 25px rgba(0, 195, 255, 0.9), inset 0 0 15px rgba(0, 195, 255, 0.5);
+            border-color: rgba(0, 195, 255, 0.8); transform: scale(1.1);
+        }
+        .conn-item:hover .conn-name { color: #00c3ff; }
+        .conn-axazon { background: var(--accent-color); border: 2px solid rgba(255,255,255,0.1); color: #131a22; }
+        .conn-axazon span { font-size: 0.75rem !important; font-weight: 900; letter-spacing: 0.5px; }
+        .conn-axazon:hover { background: var(--accent-hover); border-color: var(--accent-hover); transform: translateY(-4px); }
+        .legal-disclaimer { max-width: 1400px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; text-align: center; font-size: 0.9rem; color: #888; }
+
+        /* OVERLAY E PLAYER DE VÍDEO */
+        #video-container {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000; z-index: 10000; display: none;
+            justify-content: center; align-items: center;
+        }
+        #video-player { width: 100%; height: 100%; object-fit: contain; display: none; }
+        #tech-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner-tech {
+            position: relative; width: 80px; height: 80px;
+            border-radius: 50%; border: 3px solid transparent; border-top-color: #00c3ff;
+            animation: spin 1s linear infinite;
+        }
+        .spinner-tech::before, .spinner-tech::after {
+            content: ""; position: absolute; border-radius: 50%; border: 3px solid transparent;
+        }
+        .spinner-tech::before {
+            top: 5px; left: 5px; right: 5px; bottom: 5px; border-top-color: var(--accent-color); animation: spin 2s linear infinite;
+        }
+        .spinner-tech::after {
+            top: 15px; left: 15px; right: 15px; bottom: 15px; border-top-color: #ffffff; animation: spin 0.5s linear infinite;
+        }
+        .loader-tech-text {
+            margin-top: 20px; color: #00c3ff; font-weight: bold; font-size: 1.1rem;
+            letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 0 10px rgba(0, 195, 255, 0.6);
+            animation: pulseText 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseText { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .search-container { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-logo { max-width: 150px; }
+            .btn-neon { min-width: 100%; } 
+            .footer-grid { grid-template-columns: 1fr; }
+
+            .categories-container {
+                gap: 8px; 
+            }
+            .category-chip {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                flex-grow: 1; 
+                justify-content: center; 
+            }
+
+            .products-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+                gap: 12px; 
+            }
+            .product-info { 
+                padding: 10px; 
+            }
+            .product-image-wrapper img {
+                padding: 10px;
+            }
+            .product-title { 
+                font-size: 0.85rem; 
+                margin-bottom: 5px;
+                line-height: 1.3;
+            }
+            .product-price { 
+                font-size: 1.1rem; 
+                margin-bottom: 10px; 
+            }
+            .product-desc { 
+                display: none; 
+            }
+            .product-badge { 
+                font-size: 0.65rem; 
+                padding: 4px 6px; 
+                top: 8px; 
+                left: 8px; 
+            }
+            .btn-amazon { 
+                padding: 8px; 
+                font-size: 0.8rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-logo">AXAZON</div>
+        <div class="splash-text">Os melhores produtos da Amazon escolhidos para você.</div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <div id="video-container">
+        <div id="tech-loader">
+            <div class="spinner-tech"></div>
+            <div class="loader-tech-text">Inicializando Sistema...</div>
+        </div>
+        <video id="video-player" src="LogoMidia.mp4" playsinline></video>
+    </div>
+
+    <header id="header">
+        <div class="header-container">
+            <a href="#" class="logo">AXAZON<span>.</span></a>
+            
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="Buscar produtos...">
+            </div>
+            
+            <div class="sm-symbol">
+                SM<sup>&reg;</sup>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-logo-container">
+                    <img src="logo.png" alt="AXAZON Logo" class="hero-logo" loading="eager">
+                </div>
+                <h1>
+                    <span class="zoom-word" style="animation-delay: 0.2s;">Sua</span>
+                    <span class="zoom-word" style="animation-delay: 0.35s;">vitrine</span>
+                    <span class="zoom-word" style="animation-delay: 0.5s;">premium</span>
+                    <span class="zoom-word" style="animation-delay: 0.65s;">com</span>
+                    <span class="zoom-word" style="animation-delay: 0.8s;">curadoria</span>
+                    <span class="zoom-word" style="animation-delay: 0.95s;">exclusiva.</span>
+                </h1>
+                <p>Encontramos os melhores preços, avaliações e novidades da Amazon para facilitar a sua vida. Qualidade, segurança e entrega rápida.</p>
+                
+                <div class="hero-links-container">
+                    <a href="#ofertas" class="btn-neon hero-filter-btn" data-filter="oferta">Ofertas do Dia</a>
+                    <a href="#ofertas" class="btn-neon hero-filter-btn" data-filter="Mais Vendidos">Mais Vendidos</a>
+                    <a href="#ofertas" class="btn-neon hero-filter-btn" data-filter="lançamento">Lançamentos</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="categorias" class="categories-wrapper">
+            <div class="categories-container">
+                <div class="category-chip active" data-category="todos">🌟 Todos</div>
+                <div class="category-chip" data-category="eletronicos">⚡️Eletrônicos</div>
+                <div class="category-chip" data-category="informatica">💻 Informática</div>
+                <div class="category-chip" data-category="casa">🏠 Casa e Decoração</div>
+                <div class="category-chip" data-category="celulares">📱 Celulares</div>
+                <div class="category-chip" data-category="saude">💄 Saúde</div>
+                <div class="category-chip" data-category="cabelo">💇 Cabelo</div>
+				<div class="category-chip" data-category="cabelomais">💇 Cabelo - Mais Vendidos</div>
+                <div class="category-chip" data-category="cozinha">🍳 Cozinha</div>
+                <div class="category-chip" data-category="moda">👕 Moda Masculina</div>
+                <div class="category-chip" data-category="modaf">👗 Moda Feminina</div>
+                <div class="category-chip" data-category="games">🎮 Games</div>
+                <div class="category-chip" data-category="livros">📚 Livros e Kindle</div>
+            </div>
+        </section>
+
+        <section id="ofertas" class="section-container">
+            <h2 class="section-title" id="tituloSecaoProdutos">Todos os Produtos</h2>
+            <div class="products-grid" id="productGrid"></div>
+            <div class="no-results" id="noResultsMsg">
+                Nenhum produto encontrado para sua busca ou categoria. Tente outro termo!
+            </div>
+        </section>
+    </main>
+
+    <footer id="contato">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <a href="#" class="footer-logo">AXAZON<span>.</span></a>
+                <p>Nossa missão é encontrar as melhores ofertas e produtos premium na Amazon para poupar o seu tempo e dinheiro com segurança total.</p>
+            </div>
+            
+            <div class="footer-col" style="grid-column: span 2;">
+                <h4>Conexão Direta</h4>
+                <p>Fale conosco, tire dúvidas ou acompanhe novidades:</p>
+                
+                <div class="direct-connection-links">
+                    <a href="https://wa.me/+5581973297263" target="_blank" class="conn-item">
+                        <div class="conn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2m.01 16.51c-1.47 0-2.9-.4-4.16-1.15l-.3-.18-3.1.81.83-3.02-.2-.31c-.82-1.28-1.25-2.77-1.25-4.31 0-4.57 3.72-8.3 8.29-8.3 4.57 0 8.3 3.72 8.3 8.3s-3.73 8.29-8.3 8.29m4.56-6.11c-.25-.13-1.49-.74-1.72-.82-.23-.09-.4-.13-.57.13-.17.25-.65.82-.8 1-.15.17-.3.19-.55.06-1.11-.55-2.33-1.47-3.05-2.73-.15-.25-.02-.38.11-.51.11-.11.25-.29.38-.44.13-.15.17-.25.25-.42.09-.17.04-.33-.02-.45-.06-.13-.57-1.38-.78-1.89-.2-.5-.41-.43-.57-.44h-.48c-.17 0-.45.06-.69.32-.23.25-.9 8.8-.9 2.15s.92 2.5 1.05 2.67c.13.17 1.82 2.78 4.41 3.88 1.76.75 2.45.81 3.32.68.96-.15 1.49-.61 1.7-1.21.21-.6.21-1.11.15-1.21-.06-.09-.23-.14-.48-.26"/></svg>
+                        </div>
+                        <span class="conn-name">WhatsApp</span>
+                    </a>
+                    <a href="https://www.instagram.com/axa.zon/" target="_blank" class="conn-item">
+                        <div class="conn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </div>
+                        <span class="conn-name">Instagram</span>
+                    </a>
+                    <a href="https://www.facebook.com/share/18F8dtsJ9P/" target="_blank" class="conn-item">
+                        <div class="conn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                        </div>
+                        <span class="conn-name">Facebook</span>
+                    </a>
+                    <a href="https://x.com/axa_zon" target="_blank" class="conn-item">
+                        <div class="conn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </div>
+                        <span class="conn-name">Twitter</span>
+                    </a>
+                    <a href="mailto:axazon@hotmail.com" class="conn-item">
+                        <div class="conn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <span class="conn-name">E-mail</span>
+                    </a>
+                    <a href="#" id="btn-logotipo-video" class="conn-item">
+                        <div class="conn-icon conn-axazon">
+                            <span>AXAZON</span>
+                        </div>
+                        <span class="conn-name">Logotipo</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Termos de Uso</a>
+            </div>
+        </div>
+
+        <div class="legal-disclaimer">
+            <p><strong>Aviso Legal:</strong> Como participante do Programa de Associados da Amazon, posso receber comissão pelas compras qualificadas realizadas através dos links desta página, sem nenhum custo extra para você.</p>
+            <p style="margin-top: 15px;">&copy; <span id="currentYear"></span> AXAZON. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* =========================================================================
+           1. ARRAY DE PRODUTOS (SUPORTE A MÚLTIPLAS CATEGORIAS COM ARRAY [...])
+           =========================================================================
+        */
+        const produtos = [
+            {
+                id: "B0c4xTret",
+                title: "Lâmpada Inteligente Elgin compatível com Alexa e Google Home",
+                displayTitle: "Lâmpada Inteligente Mais Potente 15W Smart Color RGB Wifi Elgin compatível com Alexa e Google Home.",
+                desc: "Sobre este item: CRIE CENÁRIOS E AUTOMATIZE FUNÇÕES: Use as soluções dos produtos de Casa Inteligente da Elgin para criar cenários e automações. BIVOLT: É Bivolt com potência de 15W, fluxo luminoso de 803lm, tem controle de Cores RGB, Base E27, conexão Wi-Fi e garantia de 1 ano.",
+                price: "R$ 29,96",
+                rating: "★★★★★",
+                category: ["casa"],
+                badge: "Mais Vendidos",
+                image: "lampada.jpg",
+                link: "https://link.amazon/B0c4xTret"
+            },
+			{
+                id: "B037CZeM0",
+                title: "Velmo Morango Formula Original porções",
+                displayTitle: "Velmo Morango - Fórmula Original",
+                desc: "Produto Velmo sabor morango (Fórmula Original) dividido em porções.",
+                price: "R$ 59,90",
+                rating: "★★★★★",
+                category: ["saude"],
+                badge: "Mais Vendidos",
+                image: "velmo.jpg",
+                link: "https://link.amazon/B037CZeM0"
+            },
+			{
+				id: "B08EbuxMr",
+                title: "Cabelo Pele e Unha",
+                displayTitle: "Marca: FAYEZ - Fabricante: RCS Nutrition LTDA",
+                desc: "Fayez Suplemento Alimentar em Cápsulas Biotina Vitaminas B 60 Cápsulas.",
+                price: "R$ 30,59",
+                rating: "★★★★★",
+                category: ["saude"],
+                badge: "Mais Vendidos",
+                image: "cabelopeleunha.jpg",
+                link: "https://link.amazon/B08EbuxMr"
+			
+			
+			
+			},
+			{
+                id: "B04dZD4ij-s26",
+                title: "Smartphone Samsung Galaxy S26 Ultra 5G, 512GB, 12GB RAM",
+                displayTitle: "O melhor e mais completo smartphones do mundo.<br>SAMSUNG GALAXY S26 ULTRA.",
+                desc: "O Galaxy S26 Ultra é amplamente apontado por especialistas como um dos melhores e mais completos smartphones do mundo, destacando-se pela potência do processador Snapdragon 8 Elite Gen 5, versatilidade de câmeras com zoom avançado, inclusão da S Pen e inovações como a tela com recursos de privacidade.<br> Câmera quádrupla traseira de até 200MP, selfie 12MP, processador Snapdragon 8 Elite Gen 5 (3nm), Galaxy AI e carregamento rápido de até 60W Tela grande de 6,9 polegadas com taxa 1-120Hz, cor Violeta,<br> 512GB de armazenamento e 12GB de RAM para alto desempenho Dual SIM, eSIM, GPS, Bluetooth, USB-C, Modo Privacidade, Circule para Pesquisar, Tradução simultânea e Now Bar com inteligência artificial.",
+                price: "R$ 8.944,00",
+                rating: "★★★★★",
+                category: ["celulares"],
+                badge: "Lançamento! GALAXY S26 ULTRA.",
+                image: "s26utra.jpg",
+                link: "https://link.amazon/B04dZD4ij"
+            },
+            {
+                id: "B04dZD4ij-iphone",
+                title: "Apple iPhone 17 Pro Max (256 GB) - Laranja cósmico 5G, 256GB",
+                displayTitle: "Também um dos mais completo smartphones do mundo.<br>iPhone 17 Pro Max.",
+                desc: "O iPhone 17 Pro Max vem com DESIGN UNIBODY. CAPACIDADES EXCECIONAIS. — Num design unibody forjado em alumínio, está o melhor iPhone de sempre. CERAMIC SHIELD ULTRARRESISTENTE, À FRENTE E ATRÁS — O Ceramic Shield protege a parte de trás do iPhone 17 Pro Max, tornando‑o quatro vezes mais resistente ao choque. E o novo Ceramic Shield 2 à frente dá‑lhe o triplo da resistência a scratches. O MELHOR SISTEMA DE CÂMARAS PRO — Câmaras traseiras de 48 MP e zoom ótico a 8x, o mais potente de sempre num iPhone. É como ter oito objetivas profissionais à sua disposição. CÂMARA FRONTAL 18MP CENTER STAGE — Enquadramento flexível. Selfies de grupo mais inteligentes. Captura dupla de vídeo para gravação simultânea nas câmaras frontal e traseira.",
+                price: "R$ 9.773,00",
+                rating: "★★★★★",
+                category: ["celulares"],
+                badge: "Lançamento! iPHONE 17 PRO MAX.",
+                image: "iphone.jpg",
+                link: "https://link.amazon/B04dZD4ij"
+            },
+            {
+                id: "B009zFnav",
+                title: "Samsung Galaxy Watch Smartwatch Titânio",
+                displayTitle: "Samsung Galaxy Watch Smartwatch Titânio",
+                desc: "Samsung Galaxy Watch Smartwatch com acabamento em titânio, oferecendo recursos avançados de monitoramento de bem-estar, esportes e alta durabilidade para o dia a dia. Construído para ultrapassar os limites, o Galaxy Watch Ultra resiste a até 55 °C de calor, 9.000 m de altitude e 10 ATM de pressão da água, suportando tudo isso sem problemas com sua nova estrutura em titânio aeroespacial e vidro em cristal de safira. O novo processador de 3nm potencializa sua rotina diária. Alterne rapidamente entre verificar o clima e monitorar seus treinos em um instante. Além disso, ele otimiza a vida útil da bateria para uma energia de longa duração, garantindo que o seu Galaxy Ultra acompanhe o seu ritmo. Encontre o seu caminho com facilidade com o GPS mais preciso de todos os tempos no Galaxy Watch. O GPS de frequência dupla usa duas bandas de sinal de satélite (L1+L5), garantindo rastreamento preciso e consistente, mesmo em meio a densos blocos urbanos. Se suas mãos estiverem ocupadas e alguém ligar, basta pinçar seus dedos duas vezes para atender. Um simples gesto é tudo o que você precisa para tirar uma foto, atender uma chamada ou desligar um alarme. O sensor Analise de Impedância Bioelétrica (BIA) pode medir a composição do seu corpo, usando apenas as pontas dos dedos. Defina suas metas de peso, gordura corporal e massa muscular e personalize programas para atingir suas metas de saúde com precisão.",
+                price: "R$ 1.999,00",
+                rating: "★★★★★",
+                category: ["celulares"],
+                badge: "Oferta do Dia",
+                image: "relogio.jpg",
+                link: "https://link.amazon/B009zFnav"
+            },
+			{
+				id:           "B0f8y6k0W",
+				title:        "Amazon Kindle Scribe 32GB — Tela de 11\" semelhante ao papel, com luz frontal — Mais fino, mais leve, mais rápido — Escreva em cadernos, documentos e livros",
+				displayTitle: "Kindle Scribe Com Luz Frontal",
+				desc:         "Apresenta uma tela de 11\" antirreflexo com luz frontal, caderno integrado e ferramentas de IA. Sensação de papel de verdade, superfície texturizada e resposta ultrarrápida com Caneta Premium incluída.",
+				price:        "R$ 2.999,00",
+				rating:       "★★★★★",
+				category:     ["informatica","livros"],
+				badge:        "Mais Vendidos",
+				image:        "kindle.jpg",
+				link:         "https://link.amazon/B0f8y6k0W"
+			},
+            {
+                id: "4wYpu3J",
+                title: "Teclado Sem Fio Ultra Fino",
+                displayTitle: "Teclado Sem Fio Ultra Fino",
+                desc: "Conectividade inteligente Bluetooth. com Computador, Android, Mac, Note, Com Tecla \"Ç\" (Cinza Metalizado). Marca: Rhino.Fino",
+                price: "R$ 79,90",
+                rating: "★★★★★",
+                category: ["informatica"],
+                badge: "Oferta Relâmpago",
+                image: "tecl.jpg",
+                link: "https://amzn.to/4wYpu3J"
+            },
+            {
+                id: "B075KGTFKM",
+                title: "Teclado Multilaser TC212 USB Multimídia Preto",
+                displayTitle: "Teclado USB Multilaser TC212 com Teclas de Atalho Multimídia",
+                desc: "Teclado com conexão USB Plug e Play, padrão ABNT2, teclas macias e silenciosas com atalhos multimídia para facilitar o seu dia a dia.",
+                price: "R$ 39,90",
+                rating: "★★★★☆",
+                category: ["informatica"],
+                badge: "Oferta do Dia",
+                image: "teclmult.jpg",
+                link: "https://link.amazon/B0dAcHJYp"
+            },
+            {
+                id: "B0DK29K9TB",
+                title: "Impressora Portátil Bluetooth Impressão Monocromática",
+                displayTitle: "Impressora Portátil Bluetooth Monocromática",
+                desc: "Impressora térmica portátil com conexão Bluetooth sem fio, ideal para impressão de documentos, trabalhos e relatórios de forma prática e rápida.",
+                price: "R$ 56,00",
+                rating: "★★★★★",
+                category: ["eletronicos"],
+                badge: "Oferta do Dia",
+                image: "cat.jpg",
+                link: "https://link.amazon/B0413mYyo"
+            },
+            {
+                id: "3TjBWwp",
+                title: "GameSir G7 SE Controle com Fio",
+                displayTitle: "GameSir G7 SE Controle com Fio",
+                desc: "Para PC, Xbox One, Xbox Series X|S, mGamepad para Jogos Plug and Play com Joysticks Hall/Gatilho Hall, Conector de Audio de 3,5 mm, Desempenho incrível, design moderno e conectividade inteligente para você aproveitar ao máximo.",
+                price: "R$ 379,05",
+                rating: "★★★★★",
+                category: ["eletronicos", "games"],
+                badge: "Lançamento",
+                image: "jost.jpg",
+                link: "https://amzn.to/3TjBWwp"
+            },
+            {
+                id: "B0edsU6I2",
+                title: "Alexa - Echo Dot (Geração mais recente)",
+                displayTitle: "Alexa - Echo Dot (Geração mais recente)",
+                desc: "Echo Dot (Geração mais recente) | Smart speaker com Alexa, som vibrante e potente, Wi-Fi e Bluetooth | Cor Preta, com Acesso Antecipado à Alexa+.",
+                price: "R$ 459,00",
+                rating: "★★★★★",
+                category: ["eletronicos", "casa"],
+                badge: "Lançamento",
+                image: "alexa.jpg",
+                link: "https://link.amazon/B0edsU6I2"
+            },
+            {
+                id: "B0aGKdEA2",
+                title: "L'Oréal Paris Elseve Glycolic Condicionador Sela Gloss",
+                displayTitle: "L'Oréal Paris Elseve Glycolic Condicionador Sela Gloss",
+                desc: "L'Oréal Paris Elseve Glycolic Gloss Condicionador Sela Gloss, Fórmula com pH Ácido e Ácido Glicólico, Combate a Porosidade, Sela as Cutículas e Alinha os Fios, 400ml. Excelente produto para sua rotina de cuidados diários. Fórmulas dermatologicamente testadas para garantir hidratação, saúde e beleza com máxima qualidade e resultados incríveis.",
+                price: "R$ 31,59",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "condicionador.jpg",
+                link: "https://link.amazon/B0aGKdEA2"
+            },
+            {
+                id: "B03oNW4YU",
+                title: "L'Oréal Paris Elseve Glycolic Shampoo Extra Gloss",
+                displayTitle: "L'Oréal Paris Elseve Glycolic Shampoo Extra Gloss",
+                desc: "Shampoo Extra Gloss, Fórmula com pH Ácido e Ácido Glicólico, Limpeza Profunda e Combate a Porosidade dos Fios, 400ml Excelente produto para sua rotina de cuidados diários. Fórmulas dermatologicamente testadas para garantir hidratação, saúde e beleza com máxima qualidade e resultados incríveis.",
+                price: "R$ 25,59",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "shapoo.jpg",
+                link: "https://link.amazon/B03oNW4YU"
+            },
+            {
+                id: "B05BvRYQz-mascara",
+                title: "L'Oréal Paris Elseve Glycolic Gloss",
+                displayTitle: "L'Oréal Paris Elseve Glycolic Gloss Máscara Capilar",
+                desc: "Máscara Capilar Antiporosidade, com Ácido Glicólico, Sela a Cutícula, Garante 3X Mais Brilho Espelhado e Maciez Intensa, 300g Excelente produto para sua rotina de cuidados diários. Fórmulas dermatologicamente testadas para garantir hidratação, saúde e beleza com máxima qualidade e resultados incríveis.",
+                price: "R$ 21,55",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "beleza.jpg",
+                link: "https://link.amazon/B05BvRYQz"
+            },
+            {
+                id: "B014wn9dI",
+                title: "L'Oréal Paris Elseve Glycolic Creme de Pentear Super Gloss",
+                displayTitle: "L'Oréal Paris Elseve Glycolic Creme de Pentear Super Gloss",
+                desc: "Tratamento com Ácido Glicólico para Brilho Intenso, Sela Cutículas, Controla o Frizz, com Proteção Térmica e UV, 250ml, Garante 3X Mais Brilho Espelhado e Maciez Intensa. Excelente produto para sua rotina de cuidados diários. Fórmulas dermatologicamente testadas para garantir hidratação, saúde e beleza com máxima qualidade e resultados incríveis.",
+                price: "R$ 18,99",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "creme.jpg",
+                link: "https://link.amazon/B014wn9dI"
+            },
+            {
+                id: "B0eiOWW5E",
+                title: "L'Oréal Paris Elseve Glycolic Elseve Sérum, Prolongador de Gloss Glycolic Gloss (Controla o Frizz)",
+                displayTitle: "L'Oréal Paris Elseve Glycolic Elseve Sérum, Prolongador de Gloss Glycolic Gloss (Controla o Frizz)",
+                desc: "Sérum Capilar Elixir Prolongador de Gloss Glycolic Gloss, 72 Horas de Duração, Sela Intensamente os Fios, Filtro UV e Proteção Térmica, 100ml para Brilho Intenso, Sela Cutículas, Controla o Frizz, Sérum Capilar Elixir Prolongador de Gloss Glycolic Gloss, 72 Horas de Duração, Sela Intensamente os Fios, Filtro UV e Proteção Térmica, 100ml, Garante 3X Mais Brilho Espelhado e Maciez Intensa. Excelente produto para sua rotina de cuidados diários. Fórmulas dermatologicamente testadas para garantir hidratação, saúde e beleza com máxima qualidade e resultados incríveis.",
+                price: "R$ 25,03",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "serum.jpg",
+                link: "https://link.amazon/B0eiOWW5E"
+            },
+            {
+                id: "B0ck6QO64",
+                title: "Kit Tratamento Capilar L'Oréal Paris Elseve Glycolic Gloss - 5 Produtos",
+                displayTitle: "Kit Tratamento Capilar L'Oréal Paris Elseve Glycolic Gloss - 5 Produtos",
+                desc: "Kit Capilar Elseve com 5 produtos que combatem a porosidade e sela as cutículas em rotina completa: Shampoo, Máscara, Condicionador, Acidificante e Sérum Finalizador. Enriquecido com pH ácido e Ácido Glicólico que sela as cutículas abertas e preenche as falhas da fibra capilar, criando uma superfície lisa que reflete a luz com intensidade. O Sérum Finalizador com filtro UV ajuda a proteger os fios contra agressões externas, controla a oleosidade e prolonga o efeito gloss por até 72 horas sem pegar nos fios. Com uso contínuo, os fios apresentam 3X mais gloss com brilho espelhado que resiste por até 6 lavagens, mantendo a maciez e o alinhamento dos fios. A solução em 5 etapas para cabelos porosos com brilho espelhado 3X mais intenso, maciez e alinhamento que resistem por até 6 lavagens.",
+                price: "R$ 169,00",
+                rating: "★★★★★",
+                category: ["cabelo"],
+                badge: "Oferta do Dia",
+                image: "kitelseve.jpg",
+                link: "https://link.amazon/B0ck6QO64"
+            },
+            {
+                id: "16754346011",
+                title: "L'Oréal Paris Elseve Óleo Extraordinário Finalizador Capilar, Nutrição Profunda com 6 Óleos Preciosos",
+                displayTitle: "Óleo Extraordinário Elseve",
+                desc: "Nutrição profunda com 6 óleos preciosos. Oferece ação anti-frizz, proteção térmica até 230°C e brilho intenso para todos os tipos de cabelo.",
+                price: "R$ 32,54",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"], /* Exemplo de múltiplas categorias */
+                badge: "Mais Vendidos",
+                image: "oleoextra.jpg",
+                link: "https://link.amazon/B0chZdyTW"
+            },
+            {
+                id: "16754346012",
+                title: "Elseve Collagen Lifter Máscara de Tratamento Condicionante Efeito Teia Para Resgate de Massa",
+                displayTitle: "Máscara Elseve Collagen Lifter",
+                desc: "Resgata a massa dos fios com peptídeos de colágeno vegetais. Reconstrói a fibra capilar e garante até 72 horas de volume controlado.",
+                price: "R$ 28,79",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"],
+                badge: "Mais Vendidos",
+                image: "elsevecollagen.jpg",
+                link: "https://link.amazon/B01SxTCGh"
+            },
+            {
+                id: "16754346013",
+                title: "Leave-in L'Oréal Paris Elseve Collagen Lifter 100ML",
+                displayTitle: "Leave-in Elseve Collagen Lifter",
+                desc: "Deixa os cabelos visivelmente encorpados desde o 1º uso. Proporciona 72 horas de volume com fios livres de oleosidade e raízes soltas.",
+                price: "R$ 34,45",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"],
+                badge: "Mais Vendidos",
+                image: "leaveelseve.jpg",
+                link: "https://link.amazon/B0e3HhFCx"
+            },
+            {
+                id: "16754346014",
+                title: "Morte Súbita Máscara Super Hidratante 450g , Lola Cosmetics",
+                displayTitle: "Máscara Morte Súbita Lola",
+                desc: "Tratamento semanal para cabelos ressecados e danificados. Restaura a barreira de hidratação para dar suavidade, força e desembaraço.",
+                price: "R$ 39,67",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"],
+                badge: "Mais Vendidos",
+                image: "mortesubita.jpg",
+                link: "https://link.amazon/B0f6pK35k"
+            },
+            {
+                id: "16754346015",
+                title: "Shampoo Invigo Nutri Enrich Wella Professionals 1000 ml",
+                displayTitle: "Shampoo Wella Invigo Nutri Enrich",
+                desc: "Shampoo de alto desempenho que nutre intensamente, ideal para revitalizar e devolver a força e a maciez aos cabelos secos.",
+                price: "R$ 125,90",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"],
+                badge: "Mais Vendidos",
+                image: "wellashampoo.jpg",
+                link: "https://link.amazon/B0fPlRpNe"
+            },
+            {
+                id: "16754346016",
+                title: "Xapadinha Máscara Disciplinante 100g , Lola Cosmetics",
+                displayTitle: "Máscara Xapadinha Lola",
+                desc: "Máscara capilar disciplinadora para cabelos lisos. Possui complexo de proteção térmica, reduz o frizz e proporciona brilho intenso.",
+                price: "R$ 11,98",
+                rating: "★★★★★",
+                category: ["cabelo", "cabelomais"],
+                badge: "Mais Vendidos",
+                image: "xapinhamascara.jpg",
+                link: "https://link.amazon/B08RIsiDE"
+            },
+			{
+				id:           "B0cLyutex",
+				title:        "Electrolux Filtro de Água Refil Original Acqua Pure para Purificador PE12, Refil Duração 6 Meses ou 3000L",
+				displayTitle: "Refil Original Electrolux Acqua Pure",
+				desc:         "Garante água pura com tecnologia de filtragem avançada. Remove partículas sólidas e gosto de cloro, inibe o desenvolvimento de bactérias. Vida útil de 3.000L ou 6 meses.",
+				price:        "R$ 61,90",
+				rating:       "★★★★★",
+				category:     ["cozinha"],
+				badge:        "Mais Vendidos",
+				image:        "filtroeletrolux.jpg",
+				link:         "https://link.amazon/B0cLyutex"
+			},
+            {
+                id: "B0hk4YJ4f",
+                title: "Porta Ovos Empilhável",
+                displayTitle: "Porta Ovos Empilhável",
+                desc: "Porta Ovos Empilhável com Gaveta 2 Camadas 32 Unidades para Geladeira, Organizador de Ovos em Plástico PP Premium, Cozinha Compacta, Armazenamento Alimentos, Transparente e Durável.<br> OFERTA IMPERDÍVEL!",
+                price: "R$ 30,30",
+                rating: "★★★★★",
+                category: ["cozinha"],
+                badge: "Oferta do Dia",
+                image: "ovo.jpg",
+                link: "https://link.amazon/B0hk4YJ4f"
+            },
+            {
+                id: "B0iDyAd62",
+                title: "Kit 10 Potes Herméticos de Vidro 370 ml Retangular",
+                displayTitle: "Kit 10 Potes Herméticos de Vidro 370 ml Retangular",
+                desc: "Pote Hermético de Vidro Retangular 370ml Mikasa by Chalesco é a escolha ideal para o seu dia a dia. Produzido em vidro borossilicato de alta resistência térmica, ele suporta variações de temperatura e pode ser utilizado com segurança no forno (sem tampa), micro-ondas, freezer e lava-louças. Diferente do plástico, o vidro não libera toxinas, não mancha e não absorve odores, garantindo mais higiene e preservação dos alimentos. A tampa com fechamento hermético nos 4 lados e anel de silicone, proporciona vedação eficiente, evitando vazamentos e mantendo os alimentos frescos por muito mais tempo. Transparente e Durável.<br> OFERTA IMPERDÍVEL!",
+                price: "R$ 75,60",
+                rating: "★★★★★",
+                category: ["cozinha"],
+                badge: "Oferta do Dia",
+                image: "kitpote.jpg",
+                link: "https://link.amazon/B0iDyAd62"
+            },
+            
+            {
+                id: "B0edOUkHT",
+                title: "Jueshanzj Suéter masculino gola alta.",
+                displayTitle: "Jueshanzj Suéter masculino gola alta.",
+                desc: "Jueshanzj Suéter masculino pulôver de malha outono e inverno gola alta cor torcida camisola de baixo.<br>Composição do tecido principal: fibra de poliéster. Conteúdo da composição do tecido principal: 95 (%) Tecido elástico e macio mantém você aquecido e confortável em dias frios. O design slim fit pulôver de manga comprida apresenta um suéter de gola alta, padrão torcido, punhos e bainha canelados. Pulôver de design básico leve e moderno de várias cores, para uma blusa básica para uso diário em clima frio. <br> OFERTA IMPERDÍVEL!",
+                price: "R$ 75,60",
+                rating: "★★★★★",
+                category: ["moda"],
+                badge: "Oferta do Dia",
+                image: "sueter.jpg",
+                link: "https://link.amazon/B0edOUkHT"
+            },
+            {
+                id: "B09jP972B",
+                title: "Vestido Feminino Estampado Ajustável Soltinho",
+                displayTitle: "Vestido feminino ",
+                desc: "Vestido feminino estampado com alças ajustáveis e caimento soltinho, ideal para compor looks casuais e confortáveis na sua vitrine.",
+                price: "R$ 49,97",
+                rating: "★★★★★",
+                category: ["modaf"],
+                badge: "Lancamento",
+                image: "vestido.jpg",
+                link: "https://link.amazon/B09jP972B"
+            },
+            {
+                id: "B0gMT5z3G",
+                title: "PlayStation 5 Edição Digital 825GB 1 Controle Branco Sony",
+                displayTitle: "PlayStation 5 Edição Digital 825GB 1 Controle Branco Sony",
+                desc: "Design Slim Com o PS5, os jogadores contam com uma poderosa tecnologia de jogos em um console com design elegante e compacto. 825GB de Armazenamento Tenha seus jogos favoritos prontos e esperando para você começar a jogar com 825gb de armazenamento SSD integrado. SSD de ultra-alta velocidade Aproveite mais horas de jogando com uma inicialização quase instantânea dos jogos de PS5 instalados. E/S integradas A integração personalizada de sistemas do console PS5 permite aos criadores extrair os dados do SSD tão rápido que eles agora eles poderão desenvolver jogos de maneiras nunca possíveis antes.<br> OFERTA IMPERDÍVEL!",
+                price: "R$ 3.704,05",
+                rating: "★★★★★",
+                category: ["games"],
+                badge: "Lançamento",
+                image: "playstation.jpg",
+                link: "https://link.amazon/B0gMT5z3G"
+            },
+            {
+                id: "B04X9XgzD",
+                title: "Livro Pro Oracle SQL",
+                displayTitle: "Pro Oracle SQL, Segunda Edição, revela todo o poder do SQL no banco de dados Oracle",
+                desc: "Pro Oracle SQL, Segunda Edição, revela todo o poder do SQL no banco de dados Oracle — uma das implementações de SQL mais poderosas do mercado. Karen Morton atualizou o conteúdo para a versão 12c do Oracle e ajuda você a dominar os poderosos aspectos do SQL do Oracle de dentro para fora.",
+                price: "R$ 443,43",
+                rating: "★★★★★",
+                category: ["livros"],
+                badge: "Lançamento",
+                image: "livrooracle.jpg",
+                link: "https://link.amazon/B04X9XgzD"
+            }
+        ];
+
+        /* =========================================================================
+           2. RENDERIZADOR DINÂMICO DOS CARDS NO HTML
+           =========================================================================
+        */
+        function renderizarGrid(listaProdutos) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            listaProdutos.forEach(prod => {
+                const card = document.createElement('article');
+                card.className = 'product-card';
+                card.setAttribute('data-title', prod.title);
+                
+                // Converte array de categorias em string separada por espaços para o atributo data-category
+                const catValue = Array.isArray(prod.category) ? prod.category.join(' ') : prod.category;
+                card.setAttribute('data-category', catValue);
+
+                card.innerHTML = `
+                    <div class="product-badge">${prod.badge}</div>
+                    <div class="product-image-wrapper">
+                        <img src="${prod.image}" alt="${prod.title}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${prod.displayTitle}</h3>
+                        <p class="product-desc">${prod.desc}</p>
+                        <div class="product-rating">${prod.rating}</div>
+                        <div class="product-price">${prod.price}</div>
+                        <a href="${prod.link}" target="_blank" rel="noopener noreferrer" class="btn-amazon ripple">Comprar na Amazon</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            ativarRipple();
+        }
+
+        function ativarRipple() {
+            document.querySelectorAll('.ripple').forEach(button => {
+                button.removeEventListener('click', aplicarRipple);
+                button.addEventListener('click', aplicarRipple);
+            });
+        }
+
+        function aplicarRipple(e) {
+            if (e.clientX === 0 && e.clientY === 0) return; 
+            let rect = e.target.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            let y = e.clientY - rect.top;
+
+            let ripples = document.createElement('span');
+            ripples.style.left = x + 'px'; 
+            ripples.style.top = y + 'px';
+            ripples.classList.add('ripple-effect');
+            this.appendChild(ripples);
+
+            setTimeout(() => ripples.remove(), 600); 
+        }
+
+        /* =========================================================================
+           3. LÓGICAS DA PÁGINA (SPLASH, FILTROS, BUSCA E VÍDEO)
+           =========================================================================
+        */
+        document.addEventListener("DOMContentLoaded", () => {
+            renderizarGrid(produtos);
+
+            const splash = document.getElementById('splash-screen');
+            if (!sessionStorage.getItem('axazonSplashPlayed')) {
+                setTimeout(() => {
+                    splash.style.opacity = '0';
+                    setTimeout(() => { 
+                        splash.style.display = 'none'; 
+                        document.body.classList.add('dark-mode');
+                    }, 800);
+                }, 3000);
+                sessionStorage.setItem('axazonSplashPlayed', 'true');
+            } else {
+                splash.style.display = 'none';
+                document.body.classList.add('dark-mode');
+            }
+
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) header.classList.add('scrolled');
+                else header.classList.remove('scrolled');
+            });
+
+            const searchInput = document.getElementById('searchInput');
+            const noResultsMsg = document.getElementById('noResultsMsg');
+            const categoryChips = document.querySelectorAll('.category-chip');
+            const tituloSecaoProdutos = document.getElementById('tituloSecaoProdutos');
+
+            // Filtro por Categoria (com suporte a múltiplas categorias)
+            categoryChips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    categoryChips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    
+                    const selectedCategory = chip.getAttribute('data-category');
+                    const productCards = document.querySelectorAll('.product-card');
+                    let hasVisible = false;
+
+                    tituloSecaoProdutos.textContent = selectedCategory === 'todos' ? 'Todos os Produtos' : chip.textContent.replace(/[^\wÀ-ú\s]/g, '').trim();
+
+                    productCards.forEach(card => {
+                        const cardCategoryAttr = card.getAttribute('data-category') || '';
+                        const cardCategories = cardCategoryAttr.split(' ');
+                        
+                        if (selectedCategory === 'todos' || cardCategories.includes(selectedCategory)) {
+                            card.style.display = 'flex';
+                            hasVisible = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    searchInput.value = '';
+                    noResultsMsg.style.display = hasVisible ? 'none' : 'block';
+                });
+            });
+
+            searchInput.addEventListener('input', function() {
+                const term = this.value.toLowerCase().trim();
+                const productCards = document.querySelectorAll('.product-card');
+                let hasVisible = false;
+
+                categoryChips.forEach(c => c.classList.remove('active'));
+                document.querySelector('.category-chip[data-category="todos"]').classList.add('active');
+                tituloSecaoProdutos.textContent = term === '' ? 'Todos os Produtos' : `Resultados para: "${term}"`;
+
+                productCards.forEach(card => {
+                    if (card.getAttribute('data-title').toLowerCase().includes(term)) {
+                        card.style.display = 'flex';
+                        hasVisible = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                noResultsMsg.style.display = hasVisible ? 'none' : 'block';
+            });
+
+            const heroFilterBtns = document.querySelectorAll('.hero-filter-btn');
+            heroFilterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filterTerm = btn.getAttribute('data-filter').toLowerCase();
+                    const filterName = btn.textContent;
+                    const productCards = document.querySelectorAll('.product-card');
+                    let hasVisible = false;
+
+                    categoryChips.forEach(c => c.classList.remove('active'));
+                    document.querySelector('.category-chip[data-category="todos"]').classList.add('active');
+                    
+                    searchInput.value = '';
+                    tituloSecaoProdutos.textContent = filterName;
+
+                    productCards.forEach(card => {
+                        const badgeElement = card.querySelector('.product-badge');
+                        const badgeText = badgeElement ? badgeElement.textContent.toLowerCase() : '';
+                        
+                        if (badgeText.includes(filterTerm)) {
+                            card.style.display = 'flex';
+                            hasVisible = true;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    noResultsMsg.style.display = hasVisible ? 'none' : 'block';
+                });
+            });
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            const btnLogotipo = document.getElementById('btn-logotipo-video');
+            const videoContainer = document.getElementById('video-container');
+            const videoPlayer = document.getElementById('video-player');
+            const techLoader = document.getElementById('tech-loader');
+
+            btnLogotipo.addEventListener('click', (e) => {
+                e.preventDefault();
+                videoContainer.style.display = 'flex';
+                techLoader.style.display = 'flex';
+                videoPlayer.style.display = 'none';
+
+                setTimeout(() => {
+                    techLoader.style.display = 'none';
+                    videoPlayer.style.display = 'block';
+                    videoPlayer.play().catch(() => {
+                        videoPlayer.controls = true;
+                    });
+                }, 1500);
+            });
+
+            videoPlayer.addEventListener('ended', () => {
+                videoContainer.style.display = 'none';
+                videoPlayer.style.display = 'none';
+                videoPlayer.currentTime = 0;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
